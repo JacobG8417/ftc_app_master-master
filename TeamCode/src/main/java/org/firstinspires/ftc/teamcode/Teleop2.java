@@ -12,8 +12,8 @@ import java.util.Arrays;
 /**
  * Created by Ethan Schaffer on 10/31/2016.
  */
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Mecanum Drive", group="TeleOp")
-public class Teleop extends OpMode {
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Mecanum Drive2", group="TeleOp")
+public class Teleop2 extends OpMode {
 
     private static final double TRIGGERTHRESHOLD = .2;
     private static final double ACCEPTINPUTTHRESHOLD = .15;
@@ -28,7 +28,7 @@ public class Teleop extends OpMode {
         rightBackWheel = hardwareMap.dcMotor.get(UniversalConstants.RIGHT2NAME);
         leftFrontWheel.setDirection(DcMotorSimple.Direction.REVERSE);
         leftBackWheel.setDirection(DcMotorSimple.Direction.REVERSE);
-        double volts = hardwareMap.voltageSensor.get("Motor Controller 1").getVoltage();
+        //double volts = hardwareMap.voltageSensor.get("Motor Controller 1").getVoltage();
     }
 
     @Override

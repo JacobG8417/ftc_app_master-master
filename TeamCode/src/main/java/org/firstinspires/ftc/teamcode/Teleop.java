@@ -12,23 +12,26 @@ import java.util.Arrays;
 /**
  * Created by Ethan Schaffer on 10/31/2016.
  */
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Mecanum Drive", group="TeleOp")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Teleop_MecanumDrive", group="TeleOp")
 public class Teleop extends OpMode {
 
     private static final double TRIGGERTHRESHOLD = .2;
     private static final double ACCEPTINPUTTHRESHOLD = .15;
     private static final double SCALEDPOWER = 1; //Emphasis on current controller reading (vs current motor power) on the drive train
 
-    private static DcMotor leftFrontWheel, leftBackWheel, rightFrontWheel, rightBackWheel;
+    private static DcMotor front_left, back_left, front_right, back_right;
     @Override
     public void init() {
-        leftFrontWheel = hardwareMap.dcMotor.get(UniversalConstants.LEFT1NAME);
-        leftBackWheel = hardwareMap.dcMotor.get(UniversalConstants.LEFT2NAME);
-        rightFrontWheel = hardwareMap.dcMotor.get(UniversalConstants.RIGHT1NAME);
-        rightBackWheel = hardwareMap.dcMotor.get(UniversalConstants.RIGHT2NAME);
-        leftFrontWheel.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftBackWheel.setDirection(DcMotorSimple.Direction.REVERSE);
-        double volts = hardwareMap.voltageSensor.get("Motor Controller 1").getVoltage();
+        front_left = hardwareMap .dcMotor.get(UniversalConstants.LEFT1NAME);
+        back_left = hardwareMap.dcMotor.get(UniversalConstants.LEFT2NAME);
+        front_right = hardwareMap.dcMotor.get(UniversalConstants.RIGHT1NAME);
+        back_right = hardwareMap.dcMotor.get(UniversalConstants.RIGHT2NAME);
+
+        front_right.setDirection(DcMotorSimple.Direction.REVERSE);
+        front_left.setDirection(DcMotorSimple.Direction.FORWARD);
+        back_right.setDirection(DcMotorSimple.Direction.REVERSE);
+        back_left.setDirection(DcMotorSimple.Direction.FORWARD);
+        // double volts = hardwareMap.voltageSensor.get("Motor Controller 1").getVoltage();
     }
 
     @Override
@@ -40,7 +43,7 @@ public class Teleop extends OpMode {
         double BIGGERTRIGGER = gamepad1.left_trigger > gamepad1.right_trigger ? gamepad1.left_trigger : gamepad1.right_trigger;
         //Ternary, the larger trigger value is set to the value BIGGERTRIGGER
 
-        if(BIGGERTRIGGER > TRIGGERTHRESHOLD){ //If we have enough pressure on a trigger
+            if(BIGGERTRIGGER > TRIGGERTHRESHOLD){ //If we have enough pressure on a trigger
             if( (Math.abs(inputY) > Math.abs(inputX)) && (Math.abs(inputY) > Math.abs(inputC)) ){ //If our forwards motion is the largest motion vector
                 inputY /= 5*BIGGERTRIGGER; //slow down our power inputs
                 inputX /= 5*BIGGERTRIGGER; //slow down our power inputs
@@ -52,18 +55,18 @@ public class Teleop extends OpMode {
             } else if( (Math.abs(inputX) > Math.abs(inputY)) && (Math.abs(inputX) > Math.abs(inputC)) ){ //and if our strafing motion is the largest motion vector
                 inputY /= 3*BIGGERTRIGGER; //slow down our power inputs
                 inputX /= 3*BIGGERTRIGGER; //slow down our power inputs
-                inputC /= 3*BIGGERTRIGGER; //slow down our power inputs
+                inputC /= 3*BIGGERTRIGGER; //slow down our power inputs*/
             }
         }
         //Use the larger trigger value to scale down the inputs.
 
-        arcadeMecanum(inputY, inputX, inputC, leftFrontWheel, rightFrontWheel, leftBackWheel, rightBackWheel);
+        arcadeMecanum(inputY, inputX, inputC, front_left, front_right, back_left, back_right);
     }
 
     // y - forwards
     // x - side
     // c - rotation
-    public static void arcadeMecanum(double y, double x, double c, DcMotor leftFront, DcMotor rightFront, DcMotor leftBack, DcMotor rightBack) {
+    public static void arcadeMecanum(double y, double x, double c, DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight) {
         double leftFrontVal = y + x + c;
         double rightFrontVal = y - x - c;
         double leftBackVal = y - x + c;
@@ -80,11 +83,12 @@ public class Teleop extends OpMode {
         }
         double scaledPower = SCALEDPOWER;
 
-        leftFront.setPower(leftFrontVal*scaledPower+leftFront.getPower()*(1-scaledPower));
-        rightFront.setPower(rightFrontVal*scaledPower+rightFront.getPower()*(1-scaledPower));
-        leftBack.setPower(leftBackVal*scaledPower+leftBack.getPower()*(1-scaledPower));
-        rightBack.setPower(rightBackVal*scaledPower+rightBack.getPower()*(1-scaledPower));
+        front_left.setPower(leftFrontVal*scaledPower+frontLeft.getPower()*(1-scaledPower));
+        back_left.setPower(rightFrontVal*scaledPower+frontRight.getPower()*(1-scaledPower));
+        front_right.setPower(leftBackVal*scaledPower+backLeft.getPower()*(1-scaledPower));
+        back_right.setPower(rightBackVal*scaledPower+backRight.getPower()*(1-scaledPower));
     }
+
 }
 /*© 2019 GitHub, Inc.
         Terms

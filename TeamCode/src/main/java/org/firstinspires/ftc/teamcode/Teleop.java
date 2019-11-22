@@ -12,7 +12,7 @@ import java.util.Arrays;
 /**
  * Created by Ethan Schaffer on 10/31/2016.
  */
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Mecanum Tele Op", group="TeleOp")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Mecanum Drive", group="TeleOp")
 public class Teleop extends OpMode {
 
     private static final double TRIGGERTHRESHOLD = .2;

@@ -12,7 +12,7 @@ import java.util.Arrays;
 /**
  * Created by Ethan Schaffer on 10/31/2016.
  */
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Teleop_MecanumDrive", group="TeleOp")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Mecanum_Drive", group="TeleOp")
 public class Teleop extends OpMode {
 
     private static final double TRIGGERTHRESHOLD = .2;
@@ -38,7 +38,7 @@ public class Teleop extends OpMode {
     public void loop() {
         double inputY = Math.abs(gamepad1.left_stick_y) > ACCEPTINPUTTHRESHOLD ? gamepad1.left_stick_y : 0;
         double inputX = Math.abs(gamepad1.left_stick_x) > ACCEPTINPUTTHRESHOLD ? -gamepad1.left_stick_x : 0;
-        double inputC = Math.abs(gamepad1.right_stick_x)> ACCEPTINPUTTHRESHOLD ? -gamepad1.right_stick_x: 0;
+        double inputC = Math.abs(gamepad1.right_stick_y)> ACCEPTINPUTTHRESHOLD ? -gamepad1.right_stick_y: 0;
 
         double BIGGERTRIGGER = gamepad1.left_trigger > gamepad1.right_trigger ? gamepad1.left_trigger : gamepad1.right_trigger;
         //Ternary, the larger trigger value is set to the value BIGGERTRIGGER
@@ -71,6 +71,29 @@ public class Teleop extends OpMode {
         double rightFrontVal = y - x - c;
         double leftBackVal = y - x + c;
         double rightBackVal = y + x - c;
+
+        double strafeVel; double driveVel; double turnVel; {
+        driveVel = 0;
+            strafeVel = 0;
+            turnVel = 0;
+            double leftFrontVel = -driveVel - strafeVel + turnVel;
+            double rightFrontVel = -driveVel + strafeVel - turnVel;
+            double leftRearVel = -driveVel + strafeVel + turnVel;
+            double rightRearVel = -driveVel - strafeVel - turnVel;
+            double[] vels = {leftFrontVel, rightFrontVel, leftRearVel, rightRearVel};
+            //double[] vels = {Math.abs(leftFrontVel), Math.abs(rightFrontVel), Math.abs(leftRearVel), Math.abs(rightRearVel)};
+            Arrays.sort(vels);
+            if (vels[3] > 1) {
+                leftFrontVel /= vels[3];
+                rightFrontVel /= vels[3];
+                leftRearVel /= vels[3];
+                rightRearVel /= vels[3];
+            }
+            frontLeft.setPower(leftFrontVel);
+            frontRight.setPower(rightFrontVel);
+            backLeft.setPower(leftRearVel);
+            backRight.setPower(rightRearVel);
+        }
 
         //Move range to between 0 and +1, if not already
         double[] wheelPowers = {rightFrontVal, leftFrontVal, leftBackVal, rightBackVal};

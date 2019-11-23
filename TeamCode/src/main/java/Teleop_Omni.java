@@ -1,11 +1,14 @@
+import android.view.animation.GridLayoutAnimationController;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 public class Teleop_Omni {
 
-    @TeleOp(name="Teleop_Omni", group="Linear Opmode")
-    public class Driver extends LinearOpMode {
+    @TeleOp(name="Teleop_Omni", group="TeleOp")
+    public class OmniTeleop extends LinearOpMode {
 
         // public void Driver() {
         private DcMotor leftDrive;
@@ -14,15 +17,25 @@ public class Teleop_Omni {
         // private Gamepad gamepad1 = new Gamepad;
 
         @Override
-        public void runOpMode() {
-            telemetry.addData("Status", "Initialized");
-            telemetry.update();
+        public void runOpMode() throws InterruptedException {
+            waitForStart();
+            while(opModeIsActive()){
+                this.telemetry.update();
 
-            leftDrive = hardwareMap.get(DcMotor.class,"left_drive");
-            rightDrive = hardwareMap.get(DcMotor.class,"right_drive");
+                telemetry.addData("Status", "Initialized");
 
-            leftDrive.setDirection(DcMotor.Direction.FORWARD);
-            rightDrive.setDirection(DcMotor.Direction.REVERSE);
+
+
+                DcMotor front_left = hardwareMap.get(DcMotor.class,"front_left");
+                DcMotor front_right = hardwareMap.get(DcMotor.class, "front_right");
+                DcMotor back_left = hardwareMap.get(DcMotor.class, "back_left");
+                DcMotor back_right = hardwareMap.get(DcMotor.class, "back_right");
+
+
+            front_right.setDirection(DcMotorSimple.Direction.REVERSE);
+            front_left.setDirection(DcMotorSimple.Direction.FORWARD);
+            back_right.setDirection(DcMotorSimple.Direction.REVERSE);
+            back_left.setDirection(DcMotorSimple.Direction.FORWARD);
 
 
             // Wait for the game to start (driver presses PLAY)
@@ -30,7 +43,7 @@ public class Teleop_Omni {
 
             // run until the end of the match (driver presses STOP)
             while (opModeIsActive()) {
-                double power = gamepad2.right_stick_y;
+                double power = gamepad1.right_stick_y;
                 double rightmotorpower = gamepad1.right_stick_y;
                 double leftmotorpower = gamepad1.left_stick_y;
 
@@ -45,4 +58,4 @@ public class Teleop_Omni {
         }
     }
 
-}
+}}

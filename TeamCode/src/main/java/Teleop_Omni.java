@@ -12,9 +12,7 @@ public class Teleop_Omni extends LinearOpMode {
         public void runOpMode() throws InterruptedException {
             waitForStart();
             while(opModeIsActive()){
-                double power = gamepad1.right_stick_y;
-                double rightmotorpower = gamepad1.right_stick_y;
-                double leftmotorpower = gamepad1.left_stick_y;
+
                 this.telemetry.update();
 
                 telemetry.addData("Status", "Initialized");
@@ -24,11 +22,23 @@ public class Teleop_Omni extends LinearOpMode {
                 DcMotor back_left = hardwareMap.get(DcMotor.class, "back_left");
                 DcMotor back_right = hardwareMap.get(DcMotor.class, "back_right");
 
+                front_right.setDirection(DcMotorSimple.Direction.REVERSE);
+                front_left.setDirection(DcMotorSimple.Direction.FORWARD);
+                back_right.setDirection(DcMotorSimple.Direction.REVERSE);
+                back_left.setDirection(DcMotorSimple.Direction.FORWARD);
 
-            front_right.setDirection(DcMotorSimple.Direction.REVERSE);
-            front_left.setDirection(DcMotorSimple.Direction.FORWARD);
-            back_right.setDirection(DcMotorSimple.Direction.REVERSE);
-            back_left.setDirection(DcMotorSimple.Direction.FORWARD);
+                double rightfront = gamepad1.right_stick_y;
+                double rightback = gamepad1.right_stick_y;
+                double leftfront = gamepad1.left_stick_y;
+                double leftback = gamepad1.left_stick_y;
+
+                front_left.setPower(leftfront);
+                front_right.setPower(rightfront);
+                back_left.setPower(leftback);
+                back_right.setPower(rightback);
+                telemetry.addData("Status", "Running");
+                telemetry.update();
+
 
 
             // Wait for the game to start (driver presses PLAY)
@@ -37,7 +47,6 @@ public class Teleop_Omni extends LinearOpMode {
             // run until the end of the match (driver presses STOP)
 
                 telemetry.addData("Status", "Running");
-                final boolean update = telemetry.update();
 
 
             }

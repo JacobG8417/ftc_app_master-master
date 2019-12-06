@@ -14,11 +14,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
         HardwarePushbot robot = new HardwarePushbot();
         private ElapsedTime runtime = new ElapsedTime();
 
-        static final double SLIDE_SPEED = 0.5;
-        static final double LANDER_SPEED = 0.3;
-        static final double MINERAL_SPEED = 0.5;
         static final double CRATER_SPEED = 1;
-        static final double TURN_SPEED = 0.5;
 
         private DcMotor back_left = null;
         private DcMotor front_right = null;
@@ -64,7 +60,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
                 front_right.setPower(-TURN_SPEED);
                 back_right.setPower(-TURN_SPEED);
 
-            } // YEET
+            }
 
             front_left.setPower(0);
             back_left.setPower(0);

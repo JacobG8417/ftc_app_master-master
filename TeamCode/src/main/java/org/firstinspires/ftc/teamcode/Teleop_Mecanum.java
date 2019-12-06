@@ -81,9 +81,9 @@ public class Teleop_Mecanum extends OpMode {
             strafeVel = 0;
             turnVel = 0;
 
-            double leftFrontVel = +driveVel + strafeVel + turnVel;
-            double rightFrontVel = +driveVel + strafeVel + turnVel;
-            double leftRearVel = +driveVel + strafeVel + turnVel;
+            double leftFrontVel = -driveVel - strafeVel + turnVel;
+            double rightFrontVel = -driveVel - strafeVel - turnVel;
+            double leftRearVel = -driveVel - strafeVel + turnVel;
             double rightRearVel = -driveVel - strafeVel - turnVel;
             double[] vels = {leftFrontVel, rightFrontVel, leftRearVel, rightRearVel};
             //double[] vels = {Math.abs(leftFrontVel), Math.abs(rightFrontVel), Math.abs(leftRearVel), Math.abs(rightRearVel)};
@@ -111,8 +111,8 @@ public class Teleop_Mecanum extends OpMode {
         }
         double scaledPower = SCALEDPOWER;
 
-        front_left.setPower(leftFrontVal*scaledPower+frontLeft.getPower()*(1-scaledPower));
-        back_left.setPower(rightFrontVal*scaledPower+frontRight.getPower()*(1-scaledPower));
+        front_left.setPower(leftFrontVal*scaledPower+frontLeft.getPower()*(1+scaledPower));
+        back_left.setPower(rightFrontVal*scaledPower+frontRight.getPower()*(1+scaledPower));
         front_right.setPower(leftBackVal*scaledPower+backLeft.getPower()*(1-scaledPower));
         back_right.setPower(rightBackVal*scaledPower+backRight.getPower()*(1-scaledPower));
     }

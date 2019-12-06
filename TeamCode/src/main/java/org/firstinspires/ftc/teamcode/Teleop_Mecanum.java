@@ -23,26 +23,28 @@ public class Teleop_Mecanum extends OpMode {
     private static DcMotor front_left, back_left, front_right, back_right;
     @Override
     public void init() {
+        //this identifies the motors
         front_left = hardwareMap .dcMotor.get(UniversalConstants.LEFT1NAME);
         back_left = hardwareMap.dcMotor.get(UniversalConstants.LEFT2NAME);
         front_right = hardwareMap.dcMotor.get(UniversalConstants.RIGHT1NAME);
         back_right = hardwareMap.dcMotor.get(UniversalConstants.RIGHT2NAME);
 
+        //this allows the robot to move straight
         front_right.setDirection(DcMotorSimple.Direction.REVERSE);
         front_left.setDirection(DcMotorSimple.Direction.FORWARD);
         back_right.setDirection(DcMotorSimple.Direction.REVERSE);
         back_left.setDirection(DcMotorSimple.Direction.FORWARD);
-        // double volts = hardwareMap.voltageSensor.get("Motor Controller 1").getVoltage();
     }
 
     @Override
     public void loop() {
+        //this block bounds the motors to the gamepad
         double inputY = Math.abs(gamepad1.left_stick_y) > ACCEPTINPUTTHRESHOLD ? gamepad1.left_stick_y : 0;
         double inputX = Math.abs(gamepad1.left_stick_x) > ACCEPTINPUTTHRESHOLD ? -gamepad1.left_stick_x : 0;
         double inputC = Math.abs(gamepad1.right_stick_y)> ACCEPTINPUTTHRESHOLD ? -gamepad1.right_stick_y: 0;
 
         double BIGGERTRIGGER = gamepad1.left_trigger > gamepad1.right_trigger ? gamepad1.left_trigger : gamepad1.right_trigger;
-        //Ternary, the larger trigger value is set to the value BIGGERTRIGGER
+
 
             if(BIGGERTRIGGER > TRIGGERTHRESHOLD){ //If we have enough pressure on a trigger
             if( (Math.abs(inputY) > Math.abs(inputX)) && (Math.abs(inputY) > Math.abs(inputC)) ){ //If our forwards motion is the largest motion vector
@@ -68,7 +70,7 @@ public class Teleop_Mecanum extends OpMode {
     // x - side
     // c - rotation
     public static void arcadeMecanum(double y, double x, double c, DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight) {
-        double leftFrontVal = y + x + c; 
+        double leftFrontVal = y + x + c;
         double rightFrontVal = y - x - c;
         double leftBackVal = y - x + c;
         double rightBackVal = y + x - c;
@@ -81,12 +83,13 @@ public class Teleop_Mecanum extends OpMode {
             strafeVel = 0;
             turnVel = 0;
 
+            //this part allows the robot to turn with the mecanums
             double leftFrontVel = -driveVel - strafeVel + turnVel;
             double rightFrontVel = -driveVel + strafeVel - turnVel;
             double leftRearVel = -driveVel + strafeVel + turnVel;
             double rightRearVel = -driveVel - strafeVel - turnVel;
             double[] vels = {leftFrontVel, rightFrontVel, leftRearVel, rightRearVel};
-            //double[] vels = {Math.abs(leftFrontVel), Math.abs(rightFrontVel), Math.abs(leftRearVel), Math.abs(rightRearVel)};
+
             Arrays.sort(vels);
             if (vels[3] > 1) {
                 leftFrontVel /= vels[3];
@@ -99,8 +102,7 @@ public class Teleop_Mecanum extends OpMode {
             backLeft.setPower(leftRearVel);
             backRight.setPower(rightRearVel);
         }
-
-        //Move range to between 0 and +1, if not already
+        
         double[] wheelPowers = {rightFrontVal, leftFrontVal, leftBackVal, rightBackVal};
         Arrays.sort(wheelPowers);
         if (wheelPowers[3] > 1) {

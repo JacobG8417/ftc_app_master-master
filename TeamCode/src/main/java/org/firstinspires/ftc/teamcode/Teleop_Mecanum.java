@@ -118,17 +118,4 @@ public class Teleop_Mecanum extends OpMode {
     }
 
 }
-/*© 2019 GitHub, Inc.
-        Terms
-        Privacy
-        Security
-        Status
-        Help
-        Contact GitHub
-        Pricing
-        API
-        Training
-        Blog
-        About
 
- */

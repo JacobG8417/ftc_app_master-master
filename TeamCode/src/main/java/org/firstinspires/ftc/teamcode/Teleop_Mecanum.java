@@ -73,14 +73,17 @@ public class Teleop_Mecanum extends OpMode {
         double leftBackVal = y - x + c;
         double rightBackVal = y + x - c;
 
-        double strafeVel; double driveVel; double turnVel; {
-        driveVel = 0;
+        double strafeVel;
+        double driveVel;
+        double turnVel;
+        {
+            driveVel = 0;
             strafeVel = 0;
             turnVel = 0;
+
             double leftFrontVel = -driveVel - strafeVel + turnVel;
             double rightFrontVel = -driveVel - strafeVel + turnVel;
-            double leftRearVel = -driveVel -
-                    strafeVel + turnVel;
+            double leftRearVel = -driveVel - strafeVel + turnVel;
             double rightRearVel = -driveVel - strafeVel + turnVel;
             double[] vels = {leftFrontVel, rightFrontVel, leftRearVel, rightRearVel};
             //double[] vels = {Math.abs(leftFrontVel), Math.abs(rightFrontVel), Math.abs(leftRearVel), Math.abs(rightRearVel)};

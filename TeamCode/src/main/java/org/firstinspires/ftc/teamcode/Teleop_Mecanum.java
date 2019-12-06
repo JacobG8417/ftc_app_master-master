@@ -94,10 +94,10 @@ public class Teleop_Mecanum extends OpMode {
                 leftRearVel /= vels[3];
                 rightRearVel /= vels[3];
             }
-            front_left.setPower(leftFrontVel);
-            front_right.setPower(rightFrontVel);
-            back_left.setPower(leftRearVel);
-            back_right.setPower(rightRearVel);
+            frontLeft.setPower(leftFrontVel);
+            frontRight.setPower(rightFrontVel);
+            backLeft.setPower(leftRearVel);
+            backRight.setPower(rightRearVel);
         }
 
         //Move range to between 0 and +1, if not already

@@ -68,7 +68,7 @@ public class Teleop_Mecanum extends OpMode {
     // x - side
     // c - rotation
     public static void arcadeMecanum(double y, double x, double c, DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight) {
-        double leftFrontVal = y + x + c;
+        double leftFrontVal = y + x + c; // Hi...
         double rightFrontVal = y - x - c;
         double leftBackVal = y - x + c;
         double rightBackVal = y + x - c;
@@ -82,9 +82,9 @@ public class Teleop_Mecanum extends OpMode {
             turnVel = 0;
 
             double leftFrontVel = -driveVel - strafeVel + turnVel;
-            double rightFrontVel = -driveVel - strafeVel + turnVel;
-            double leftRearVel = -driveVel - strafeVel + turnVel;
-            double rightRearVel = -driveVel - strafeVel + turnVel;
+            double rightFrontVel = -driveVel + strafeVel -turnVel;
+            double leftRearVel = -driveVel + strafeVel + turnVel;
+            double rightRearVel = -driveVel - strafeVel - turnVel;
             double[] vels = {leftFrontVel, rightFrontVel, leftRearVel, rightRearVel};
             //double[] vels = {Math.abs(leftFrontVel), Math.abs(rightFrontVel), Math.abs(leftRearVel), Math.abs(rightRearVel)};
             Arrays.sort(vels);
@@ -94,10 +94,10 @@ public class Teleop_Mecanum extends OpMode {
                 leftRearVel /= vels[3];
                 rightRearVel /= vels[3];
             }
-            frontLeft.setPower(leftFrontVel);
-            frontRight.setPower(rightFrontVel);
-            backLeft.setPower(leftRearVel);
-            backRight.setPower(rightRearVel);
+            front_left.setPower(leftFrontVel);
+            front_right.setPower(rightFrontVel);
+            back_left.setPower(leftRearVel);
+            back_right.setPower(rightRearVel);
         }
 
         //Move range to between 0 and +1, if not already

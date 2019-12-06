@@ -68,7 +68,7 @@ public class Teleop_Mecanum extends OpMode {
     // x - side
     // c - rotation
     public static void arcadeMecanum(double y, double x, double c, DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight) {
-        double leftFrontVal = y + x + c; // Hi...
+        double leftFrontVal = y + x + c; 
         double rightFrontVal = y - x - c;
         double leftBackVal = y - x + c;
         double rightBackVal = y + x - c;

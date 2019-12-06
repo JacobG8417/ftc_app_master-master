@@ -112,8 +112,8 @@ public class Teleop_Mecanum extends OpMode {
         double scaledPower = SCALEDPOWER;
 
         front_left.setPower(leftFrontVal*scaledPower+frontLeft.getPower()*(1+scaledPower));
-        back_left.setPower(rightFrontVal*scaledPower+frontRight.getPower()*(1+scaledPower));
-        front_right.setPower(leftBackVal*scaledPower+backLeft.getPower()*(1-scaledPower));
+        back_left.setPower(rightFrontVal*scaledPower+backLeft.getPower()*(1+scaledPower));
+        front_right.setPower(leftBackVal*scaledPower+frontRight.getPower()*(1-scaledPower));
         back_right.setPower(rightBackVal*scaledPower+backRight.getPower()*(1-scaledPower));
     }
 

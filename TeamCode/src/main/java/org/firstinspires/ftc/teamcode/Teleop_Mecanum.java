@@ -3,15 +3,15 @@ ADB guide can be found at:
 https://ftcprogramming.wordpress.com/2015/11/30/building-ftc_app-wirelessly/
 */
 package org.firstinspires.ftc.teamcode;
+import android.view.animation.GridLayoutAnimationController;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import java.util.Arrays;
 
-/**
- * Created by Ethan Schaffer on 10/31/2016.
- */
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Mecanum_Drive", group="TeleOp")
 public class Teleop_Mecanum extends OpMode {
 
@@ -23,17 +23,31 @@ public class Teleop_Mecanum extends OpMode {
     private static DcMotor front_left, back_left, front_right, back_right;
     @Override
     public void init() {
-        //this identifies the motors
+
+        //this identifies the motors and servos
         front_left = hardwareMap .dcMotor.get(UniversalConstants.LEFT1NAME);
         back_left = hardwareMap.dcMotor.get(UniversalConstants.LEFT2NAME);
         front_right = hardwareMap.dcMotor.get(UniversalConstants.RIGHT1NAME);
         back_right = hardwareMap.dcMotor.get(UniversalConstants.RIGHT2NAME);
+        DcMotor intake_right = hardwareMap.dcMotor.get(UniversalConstants.RIGHT3NAME);
+        DcMotor intake_left = hardwareMap.dcMotor.get(UniversalConstants.LEFT3NAME);
 
-        //this allows the robot to move straight
+        //this allows the robot to move straight and the intake to intake stuff
         front_right.setDirection(DcMotorSimple.Direction.REVERSE);
         front_left.setDirection(DcMotorSimple.Direction.FORWARD);
         back_right.setDirection(DcMotorSimple.Direction.REVERSE);
         back_left.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        intake_right.setDirection(DcMotorSimple.Direction.FORWARD);
+        intake_left.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        double intakeright = gamepad2.right_stick_y;
+        double intakeleft = gamepad2.right_stick_y;
+
+        intake_left.setPower(intakeleft);
+        intake_right.setPower(intakeright);
+        telemetry.addData("Status", "Running");
+        telemetry.update();
     }
 
     @Override
@@ -43,8 +57,8 @@ public class Teleop_Mecanum extends OpMode {
         double inputX = Math.abs(gamepad1.left_stick_x) > ACCEPTINPUTTHRESHOLD ? -gamepad1.left_stick_x : 0;
         double inputC = Math.abs(gamepad1.right_stick_y)> ACCEPTINPUTTHRESHOLD ? -gamepad1.right_stick_y: 0;
 
-        double BIGGERTRIGGER = gamepad1.left_trigger > gamepad1.right_trigger ? gamepad1.left_trigger : gamepad1.right_trigger;
 
+        double BIGGERTRIGGER = gamepad1.left_trigger > gamepad1.right_trigger ? gamepad1.left_trigger : gamepad1.right_trigger;
 
             if(BIGGERTRIGGER > TRIGGERTHRESHOLD){ //If we have enough pressure on a trigger
             if( (Math.abs(inputY) > Math.abs(inputX)) && (Math.abs(inputY) > Math.abs(inputC)) ){ //If our forwards motion is the largest motion vector
@@ -102,7 +116,7 @@ public class Teleop_Mecanum extends OpMode {
             backLeft.setPower(leftRearVel);
             backRight.setPower(rightRearVel);
         }
-        
+
         double[] wheelPowers = {rightFrontVal, leftFrontVal, leftBackVal, rightBackVal};
         Arrays.sort(wheelPowers);
         if (wheelPowers[3] > 1) {

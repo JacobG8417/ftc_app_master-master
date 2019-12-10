@@ -24,7 +24,7 @@ public class Teleop_Mecanum extends OpMode {
     @Override
     public void init() {
 
-        //this identifies the motors and servos
+        //this identifies the motors
         front_left = hardwareMap .dcMotor.get(UniversalConstants.LEFT1NAME);
         back_left = hardwareMap.dcMotor.get(UniversalConstants.LEFT2NAME);
         front_right = hardwareMap.dcMotor.get(UniversalConstants.RIGHT1NAME);

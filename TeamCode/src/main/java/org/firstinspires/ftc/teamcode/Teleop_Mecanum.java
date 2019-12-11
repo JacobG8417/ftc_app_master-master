@@ -3,7 +3,6 @@ ADB guide can be found at:
 https://ftcprogramming.wordpress.com/2015/11/30/building-ftc_app-wirelessly/
 */
 package org.firstinspires.ftc.teamcode;
-import android.view.animation.GridLayoutAnimationController;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -21,6 +20,9 @@ public class Teleop_Mecanum extends OpMode {
     private static final double SCALEDPOWER = 1; //Emphasis on current controller reading (vs current motor power) on the drive train
 
     private static DcMotor front_left, back_left, front_right, back_right;
+    private Servo servoTest;
+    private DcMotorSimple motorTest;
+
     @Override
     public void init() {
 
@@ -37,6 +39,34 @@ public class Teleop_Mecanum extends OpMode {
         front_left.setDirection(DcMotorSimple.Direction.FORWARD);
         back_right.setDirection(DcMotorSimple.Direction.REVERSE);
         back_left.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        // run until the end of the match (driver presses STOP)
+        double tgtPower = 0;
+        while (opModeIsActive()) {
+            tgtPower = -this.gamepad2.left_stick_y;
+            motorTest.setPower(tgtPower);
+            // check to see if we need to move the servo.
+            if(gamepad2.y) {
+                // move to 0 degrees.
+                servoTest.setPosition(0);
+            } else if (gamepad2.x || gamepad2.b) {
+                // move to 90 degrees.
+                servoTest.setPosition(0.5);
+            } else if (gamepad2.a) {
+                // move to 180 degrees.
+                servoTest.setPosition(1);
+            }
+            telemetry.addData("Servo Position", servoTest.getPosition());
+            telemetry.addData("Target Power", tgtPower);
+            telemetry.addData("Motor Power", motorTest.getPower());
+            telemetry.addData("Status", "Running");
+            telemetry.update();
+
+        }
+    }
+
+    private boolean opModeIsActive() {
+        return false;
     }
 
     @Override

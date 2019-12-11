@@ -12,7 +12,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 import java.util.Arrays;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Mecanum_Drive", group="TeleOp")
-public class Teleop_Mecanum extends OpMode {
+public class Teleop_Mecanum<servoPosition> extends OpMode {
+
+
+    Servo servo;
+    double servoPosition = 0.0;
+
 
 
     private static final double TRIGGERTHRESHOLD = .2;
@@ -20,19 +25,20 @@ public class Teleop_Mecanum extends OpMode {
     private static final double SCALEDPOWER = 1; //Emphasis on current controller reading (vs current motor power) on the drive train
 
     private static DcMotor front_left, back_left, front_right, back_right;
-    private Servo servoTest;
-    private DcMotorSimple motorTest;
+    //private Servo servoTest;
+    //private DcMotorSimple motorTest;
 
     @Override
     public void init() {
+
+        servo = hardwareMap.servo.get("servo");
+        servo.setPosition(servoPosition);
 
         //this identifies the motors
         front_left = hardwareMap .dcMotor.get(UniversalConstants.LEFT1NAME);
         back_left = hardwareMap.dcMotor.get(UniversalConstants.LEFT2NAME);
         front_right = hardwareMap.dcMotor.get(UniversalConstants.RIGHT1NAME);
         back_right = hardwareMap.dcMotor.get(UniversalConstants.RIGHT2NAME);
-        DcMotor intake_right = hardwareMap.dcMotor.get(UniversalConstants.RIGHT3NAME);
-        DcMotor intake_left = hardwareMap.dcMotor.get(UniversalConstants.LEFT3NAME);
 
         //this allows the robot to move straight and the intake to intake stuff
         front_right.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -40,36 +46,11 @@ public class Teleop_Mecanum extends OpMode {
         back_right.setDirection(DcMotorSimple.Direction.REVERSE);
         back_left.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        // run until the end of the match (driver presses STOP)
-        double tgtPower = 0;
-        while (opModeIsActive()) {
-            tgtPower = -this.gamepad2.left_stick_y;
-            motorTest.setPower(tgtPower);
-            // check to see if we need to move the servo.
-            if(gamepad2.y) {
-                // move to 0 degrees.
-                servoTest.setPosition(0);
-            } else if (gamepad2.x || gamepad2.b) {
-                // move to 90 degrees.
-                servoTest.setPosition(0.5);
-            } else if (gamepad2.a) {
-                // move to 180 degrees.
-                servoTest.setPosition(1);
-            }
-            telemetry.addData("Servo Position", servoTest.getPosition());
-            telemetry.addData("Target Power", tgtPower);
-            telemetry.addData("Motor Power", motorTest.getPower());
-            telemetry.addData("Status", "Running");
-            telemetry.update();
-
         }
-    }
 
-    private boolean opModeIsActive() {
-        return false;
-    }
 
-    @Override
+
+     @Override
     public void loop() {
         //this block bounds the motors to the gamepad
         double inputY = Math.abs(gamepad1.left_stick_y) > ACCEPTINPUTTHRESHOLD ? gamepad1.left_stick_y : 0;
@@ -92,11 +73,22 @@ public class Teleop_Mecanum extends OpMode {
                 inputY /= 3*BIGGERTRIGGER; //slow down our power inputs
                 inputX /= 3*BIGGERTRIGGER; //slow down our power inputs
                 inputC /= 3*BIGGERTRIGGER; //slow down our power inputs*/
+
+
+                servoPosition = 0.5;
+                servo.setPosition(servoPosition);
+                sleep(2000);
+
+                servoPosition = 1.0;
+                servo.setPosition(servoPosition);
+
             }
         }
         //Use the larger trigger value to scale down the inputs.
-
         arcadeMecanum(inputY, inputX, inputC, front_left, front_right, back_left, back_right);
+    }
+
+    private void sleep(int i) {
     }
 
     // y - forwards

@@ -37,17 +37,6 @@ public class Teleop_Mecanum extends OpMode {
         front_left.setDirection(DcMotorSimple.Direction.FORWARD);
         back_right.setDirection(DcMotorSimple.Direction.REVERSE);
         back_left.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        intake_right.setDirection(DcMotorSimple.Direction.FORWARD);
-        intake_left.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        double intakeright = gamepad2.right_stick_y;
-        double intakeleft = gamepad2.right_stick_y;
-
-        intake_left.setPower(intakeleft);
-        intake_right.setPower(intakeright);
-        telemetry.addData("Status", "Running");
-        telemetry.update();
     }
 
     @Override
